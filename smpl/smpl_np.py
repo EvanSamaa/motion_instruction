@@ -3,6 +3,33 @@ import numpy as np
 import pickle
 
 
+smpl_keypoint_semantic = {
+  0: 'root',
+  1: 'llegroot',
+  2: 'rlegroot',
+  3: 'lowerback',
+  4: 'lknee',
+  5: 'rknee',
+  6: 'upperback',
+  7: 'lankle',
+  8: 'rankle',
+  9: 'thorax',
+  10: 'ltoes',
+  11: 'rtoes',
+  12: 'lowerneck',
+  13: 'lclavicle',
+  14: 'rclavicle',
+  15: 'upperneck',
+  16: 'larmroot',
+  17: 'rarmroot',
+  18: 'lelbow',
+  19: 'relbow',
+  20: 'lwrist',
+  21: 'rwrist',
+  22: 'lhand',
+  23: 'rhand'
+}
+
 class SMPLModel():
   def __init__(self, model_path):
     """
@@ -44,7 +71,8 @@ class SMPLModel():
     self.verts = None
     self.J = None
     self.R = None
-
+    self.G = None
+    self.posed_J = None
     self.update()
 
   def set_params(self, pose=None, beta=None, trans=None):
@@ -113,11 +141,18 @@ class SMPLModel():
         np.hstack([self.J, np.zeros([24, 1])]).reshape([24, 4, 1])
         )
       )
+    self.G = G
     # transformation of each vertex
     T = np.tensordot(self.weights, G, axes=[[1], [0]])
     rest_shape_h = np.hstack((v_posed, np.ones([v_posed.shape[0], 1])))
     v = np.matmul(T, rest_shape_h.reshape([-1, 4, 1])).reshape([-1, 4])[:, :3]
     self.verts = v + self.trans.reshape([1, 3])
+    # transform each joint
+    smpl_joint_weights = np.eye(24)
+    T_joints = np.tensordot(smpl_joint_weights, self.G, axes=[[1], [0]])
+    restshape_J = np.hstack((self.J, np.ones([self.J.shape[0], 1])))
+    self.posed_J = np.matmul(T_joints, restshape_J.reshape([-1, 4, 1])).reshape([-1, 4])[:, :3]
+
 
   def rodrigues(self, r):
     """
