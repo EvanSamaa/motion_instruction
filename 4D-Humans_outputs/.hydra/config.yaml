@@ -12,7 +12,7 @@ verbose: false
 detect_shots: false
 video_seq: null
 video:
-  source: /scratch/ondemand27/evanpan/data/motion_tracking_data/truck_stand12.mp4
+  source: /scratch/ondemand27/evanpan/data/motion_tracking_data/fs_bigspin123.mp4
   output_dir: ../4D-Humans_outputs/
   extract_video: true
   base_path: null

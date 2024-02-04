@@ -111,11 +111,11 @@ hydra:
   overrides:
     hydra: []
     task:
-    - video.source=/scratch/ondemand27/evanpan/data/motion_tracking_data/truck_stand12.mp4
+    - video.source=/scratch/ondemand27/evanpan/data/motion_tracking_data/fs_bigspin123.mp4
   job:
     name: track
     chdir: null
-    override_dirname: video.source=/scratch/ondemand27/evanpan/data/motion_tracking_data/truck_stand12.mp4
+    override_dirname: video.source=/scratch/ondemand27/evanpan/data/motion_tracking_data/fs_bigspin123.mp4
     id: ???
     num: ???
     config_name: config
